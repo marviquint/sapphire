@@ -28,3 +28,6 @@ def home(request):
 
 def url(request):
     return render(request, 'base/url.html')
+
+def search(request):
+    return render(request, 'base/searchtool.html')
