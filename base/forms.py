@@ -1,7 +1,7 @@
-# from django import forms 
-# from base.models import Employee
+from django import forms 
+from base.models import Employee
 
-# class EmployeeForm(forms.ModelForm):
-#     class Meta:
-#         model = Employee
-#         fields = ['email', 'password']
+class EmployeeForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['email', 'password']
