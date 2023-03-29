@@ -87,28 +87,84 @@
       </nav>
       <!-- NAVBAR -->
 
-      <!-- CONTENT -->
+      <section id="main-content">
+        <!-- CONTENT -->
       {% block content %} 
       
       {% endblock content %}
       <!-- CONTENT -->
+      </section>
     </section>
 
     <script>
-      const allSideMenu = document.querySelectorAll(
-        "#sidebar .side-menu.top li a"
+
+
+      {% comment %} // Get all the li elements
+const liElements = document.querySelectorAll('li');
+
+// Add a click event listener to each li element
+liElements.forEach(li => {
+  li.addEventListener('click', function(event) {
+    // Prevent the default behavior of the anchor tag
+    event.preventDefault();
+    
+    // Remove the active class from all li elements
+    liElements.forEach(li => {
+      li.classList.remove('active');
+    });
+    
+    // Add the active class to the clicked li element
+    li.classList.add('active');
+
+    const href = li.querySelector('a').getAttribute('href');
+    
+    // Fetch new data using AJAX
+    fetch(href)
+      .then(response => response.text())
+      .then(data => {
+        // Update the content section with the new data
+        const contentSection = document.getElementById('main-content');
+        contentSection.innerHTML = data;
+      })
+      .catch(error => {
+        console.error('Error fetching new data:', error);
+      });
+  });
+}); {% endcomment %}
+
+     
+    const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
+
+    allSideMenu.forEach(item=> {
+      const li = item.parentElement;
+
+      item.addEventListener('click', function () {
+        allSideMenu.forEach(i=> {
+          i.parentElement.classList.remove('active');
+        })
+        li.classList.add('active');
+      })
+    });
+    
+    {% comment %} $("a").click(function(event) {
+      event.preventDefault(); // prevent default behavior of anchor tag
+      var url = $(this).attr("href"); // get URL of the link
+      $("#content-section").load(url + " #content-section"); // load only the desired content section
+    }); {% endcomment %}
+      {% comment %} const allSideMenu = document.querySelectorAll(
+        "#sidebar li a "
       );
 
       allSideMenu.forEach((item) => {
         const li = item.parentElement;
 
         item.addEventListener("click", function (event) {
-          allSideMenu.forEach((i) => {
-            i.parentElement.classList.remove("active");
-          });
-          li.classList.add("active");
+          allSideMenu.forEach(i=> {
+            i.parentElement.classList.remove('active');
+          })
+          item.parentElement.classList.add("active");
         });
-      });
+      }); {% endcomment %}
 
       // TOGGLE SIDEBAR
       const menuBar = document.querySelector("#content nav .bx.bx-menu");
