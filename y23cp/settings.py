@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'y23cp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sample_db',
+        'NAME': 'innodata_db',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
