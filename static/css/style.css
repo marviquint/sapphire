@@ -1,4 +1,4 @@
-/*!
+/*
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
@@ -8281,7 +8281,7 @@ a[data-toggle="collapse"] {
   color:white;
   background: #27678a;
   border-color: white; }
-  .btn.btn-primary:hover, .btn.btn-primary:focus {
+  .btn.btn-primary:hover{
     color: var(--grey);    
     background: #f8b739 !important;
     border-color: #f8b739 !important; }
