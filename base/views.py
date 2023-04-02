@@ -7,8 +7,16 @@ from django.contrib import messages
 
 # Create your views here.
 
+from django.shortcuts import render, redirect
+from base.models import Users
+from base.forms import UserForm
+import random
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
+# Create your views here.
+
 def index(request):
-    page = 'login'
     if request.user.is_authenticated:
         return redirect('home')
     
@@ -17,19 +25,27 @@ def index(request):
         password = request.POST.get('password')
 
         try:
-            user = Users.objects.get(username=email)
-        except:
-            messages.error(request, 'User Does not Exists!')
+            user = Users.objects.get(email=email)
+        except Users.DoesNotExist:
+            user = None
 
-        user = authenticate(request, username=email, password=password)
+        auth_user = authenticate(request, email=email, password=password)
 
         if user is not None:
-            index(request, user)
-            return redirect('home')
+            if auth_user is not None:
+                login(request, auth_user)
+                print("Login Successful!")
+                return redirect('home')
+            else:
+                print("Invalid email or password.")
+                return render(request, 'base/index.html', {'error': 'Invalid email or password.'})
         else:
-            messages.error(request, 'Username or Password Does not Exists!')
-    context = {"page": page}
-    return render(request, 'base/index.html', context)
+            print("User does not exist.")
+            return render(request, 'base/index.html', {'error': 'User does not exist.'})
+
+    return render(request, 'base/index.html')
+
+
 
 def otp(request):
     return render(request, 'base/otp.html')
