@@ -76,6 +76,16 @@ WSGI_APPLICATION = 'y23cp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+AUTHENTICATION_BACKENDS = [ 
+    'y23cp.backends.MyPHPMySQLBackend',
+]
+
+AUTH_USER_MODEL = 'base.Users'
+
+
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

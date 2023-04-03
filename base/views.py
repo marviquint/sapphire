@@ -3,47 +3,68 @@ from base.models import Users
 from base.forms import UserForm
 import random
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
-# Create your views here.
-
-from django.shortcuts import render, redirect
-from base.models import Users
-from base.forms import UserForm
-import random
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
-
 # Create your views here.
 
 def index(request):
-    if request.user.is_authenticated:
-        return redirect('home')
     
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-
+        # Look up the user by email instead of username
         try:
             user = Users.objects.get(email=email)
         except Users.DoesNotExist:
             user = None
 
-        auth_user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            if auth_user is not None:
-                login(request, auth_user)
-                print("Login Successful!")
-                return redirect('home')
-            else:
-                print("Invalid email or password.")
-                return render(request, 'base/index.html', {'error': 'Invalid email or password.'})
+        if request.user.is_authenticated:
+            print("You are authenticated")
+            return redirect('home')
         else:
-            print("User does not exist.")
-            return render(request, 'base/index.html', {'error': 'User does not exist.'})
+            auth_user = authenticate(request, email=email, password=password)
+            print("You are not authenticated")
 
-    return render(request, 'base/index.html')
+        # Authenticate the user using username and password
+        if user is not None:
+            auth_user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request.user, auth_user)
+                return redirect('home')
+
+        return render(request, 'base/index.html', {'error': 'Invalid credentials'})
+
+    else:
+        return render(request, 'base/index.html')
+
+
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    # if request.method == 'POST':
+    #     email = request.POST.get('email')
+    #     password = request.POST.get('password')
+
+    #     try:
+    #         user = Users.objects.get(email=email)
+    #     except Users.DoesNotExist:
+    #         user = None
+
+    #     auth_user = authenticate(request, email=email, password=password)
+
+    #     if user is not None:
+    #         if auth_user is not None:
+    #             login(request, auth_user)
+    #             print("Login Successful!")
+    #             return redirect('home')
+    #         else:
+    #             print("Invalid email or password.")
+    #             return render(request, 'base/index.html', {'error': 'Invalid email or password.'})
+    #     else:
+    #         print("User does not exist.")
+    #         return render(request, 'base/index.html', {'error': 'User does not exist.'})
+
+    # return render(request, 'base/index.html')
 
 
 
@@ -62,7 +83,7 @@ def otp(request):
 #     else:
 #         form = EmployeeForm()
 #     return render(request, 'base/sample.html', {'form': form})
-
+#@login_required
 def home(request):
     return render(request, 'base/home.html')
 
